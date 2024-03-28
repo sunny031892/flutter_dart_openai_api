@@ -25,15 +25,29 @@ class _ImageGeneratorHomeState extends State<ImageGeneratorHome> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
   String? _imageUrl, _errorMessage;
-
+  
+  // TODO: Complete the code
   void _generateImage(String prompt) async {
+    print('Generating image for prompt: $prompt');
     setState(() {
       _isLoading = true;
       _imageUrl = null;
       _errorMessage = null;
     });
 
-    // TODO: Complete the code
+    try {
+      var response = await ImageGenerationService().generateImage(prompt);
+      setState(() {
+        _isLoading = false;
+        _imageUrl = response['replicate']['items'][0]["image_resource_url"];
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
+      });
+    }
   }
 
   Widget showResponse() {
